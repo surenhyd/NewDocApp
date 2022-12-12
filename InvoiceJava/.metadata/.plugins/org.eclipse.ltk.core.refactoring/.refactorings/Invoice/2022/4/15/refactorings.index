@@ -1,9 +1,0 @@
-1649305992807	Rename type 'ReceviablesDetailsRepo'
-1649306020623	Rename type 'ReceviablesDetailsController'
-1649306043134	Rename type 'ReceviablesDetails'
-1649306064389	Rename type 'ReceviablesDetailsService'
-1649414537249	Delete element
-1649417141716	Rename type 'SupplierInvoice'
-1649514244818	Rename type 'Twilio'
-1649515303783	Rename type 'SendSMS'
-1649515327176	Rename type 'SendSMS'

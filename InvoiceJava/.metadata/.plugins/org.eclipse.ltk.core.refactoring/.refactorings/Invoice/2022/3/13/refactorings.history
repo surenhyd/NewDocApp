@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename type &apos;InvoiceOrg.Invoice.Models.Reports&apos; to &apos;ReportsDto&apos;&#x0D;&#x0A;- Original project: &apos;Invoice&apos;&#x0D;&#x0A;- Original element: &apos;InvoiceOrg.Invoice.Models.Reports&apos;&#x0D;&#x0A;- Renamed element: &apos;InvoiceOrg.Invoice.Models.ReportsDto&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;Reports&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;InvoiceOrg.Invoice.Models{Reports.java[Reports" matchStrategy="1" name="ReportsDto" qualified="false" references="true" similarDeclarations="false" stamp="1647864415354" textual="false" version="1.0"/>
-</session>

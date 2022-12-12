@@ -1,0 +1,200 @@
+package InvoiceOrg.Invoice.Controller;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import InvoiceOrg.Invoice.Models.AppointmentFeeReceivables;
+import InvoiceOrg.Invoice.Models.Appointments;
+import InvoiceOrg.Invoice.Models.MessageCls;
+import InvoiceOrg.Invoice.Models.noOfTodayNewAppCls;
+import InvoiceOrg.Invoice.Service.AppointmentsService;
+import InvoiceOrg.Invoice.dto.AppointmentClassDto;
+import InvoiceOrg.Invoice.dto.AppointmentInfDto;
+import InvoiceOrg.Invoice.dto.AppointmentsCount;
+import InvoiceOrg.Invoice.dto.BookedAppointmentsDto;
+import InvoiceOrg.Invoice.dto.CancelledAppointmentsDto;
+import InvoiceOrg.Invoice.dto.DatesRange;
+import InvoiceOrg.Invoice.dto.DoctorByAllDepDto;
+import InvoiceOrg.Invoice.dto.NoShowAppointments;
+import InvoiceOrg.Invoice.util.JwtUtil;
+
+
+@CrossOrigin
+@RestController
+@RequestMapping("/appointments")
+public class AppointmentsContoller {
+
+	@Autowired
+    private AppointmentsService appointmentsService;
+	
+	@Autowired
+	private JwtUtil  jwtUtil;
+	
+	
+	
+	//VERIFIED
+	
+	@GetMapping("/getAppByDate")    
+	public List<Appointments>  getAppByDate(@RequestParam("date") String dateS,@RequestParam("branchId") int branchId,@RequestParam("doctorId") int doctorId) { 
+		 LocalDate date = LocalDate.parse(dateS);
+		 System.out.println(date);
+		 return this.appointmentsService.findByAppointmentDate(date,branchId,doctorId);
+	}
+	
+	@GetMapping("/noOfVisitPatientToDoctor")    
+	public MessageCls noOfVisitPatientToDoctor(@RequestParam("patientId") int patientId, @RequestParam("doctorId") int doctorId) {
+	return this.appointmentsService.noOfVisitPatientToDoctor(patientId, doctorId); 
+	}
+	
+	@PostMapping("/save")
+	public void insert(@RequestBody Appointments appointments) throws MessagingException {
+		 this.appointmentsService.insert(appointments);
+	}
+	
+	@GetMapping("/getAppointmentCount")
+	public AppointmentsCount getAppointmentsCount() {
+	return this.appointmentsService.getAppointmentsCount();
+	}
+	
+	@GetMapping("/getKindAppointment")    
+	public List<AppointmentInfDto> getKindData(@RequestParam String type) {
+	return this.appointmentsService.getKindData(type);
+	}
+	
+//	@GetMapping("/getKindAppointmentByPatientId")    
+//	public void getKindDataByPatientId(@RequestParam String type, HttpServletRequest request) {
+//		String authorizationHeader = request.getHeader("Authorization");
+//		if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+//			String token = authorizationHeader.substring(7);
+//			System.out.println("token is"+token);
+//			String username = jwtUtil.extractUsername(token);
+//			System.out.println(username);
+//		}
+//	    //return this.appointmentsService.getKindDataByPatientId(type,patientId);
+//	}
+	
+	@GetMapping("/getKindAppointmentByPatientId")    
+	public List<AppointmentInfDto> getKindDataByPatientId(@RequestParam String type,@RequestParam int patientId ) {
+	    return this.appointmentsService.getKindDataByPatientId(type,patientId);
+	}
+	
+	@PutMapping("/findByPatientId")
+	public List<AppointmentInfDto> findByPatientId(@RequestBody Appointments appointments) {
+	return this.appointmentsService.findByPatientID(appointments.getPatientId());
+	}
+	
+	@GetMapping("/getAppointmentsCountByDoctorId")
+	public AppointmentsCount getAppointmentsCountByDoctorId(@RequestParam("doctorId") int doctorId) {
+	return this.appointmentsService.getAppointmentsCountByDoctorId(doctorId);
+	}
+	
+	//=================
+
+	@GetMapping("/getAllAppointment")   
+	public List<AppointmentInfDto> getAll() {
+	return this.appointmentsService.getAll();
+	}
+
+	@GetMapping("/getById")
+	public AppointmentClassDto findByID(@RequestParam("id") int id) {
+	return this.appointmentsService.getById(id);
+	}
+	
+
+	
+
+	
+	
+	
+//	@PutMapping("/notesEdit")
+//	public void editNotes(@RequestBody Appointments appointments) {
+//	 this.appointmentsService.editNotes(appointments);
+//	}
+	
+//	@PutMapping("/isAttended")
+//	public void isAttended(@RequestBody Appointments appointments) {
+//	 this.appointmentsService.isAttended(appointments);
+//	}
+	
+	@PostMapping("/makePayment")
+	public AppointmentFeeReceivables makePayment(@RequestBody AppointmentFeeReceivables appointmentFeeReceivables) {
+	 return this.appointmentsService.makePayment(appointmentFeeReceivables);
+	}
+	
+//	@PutMapping("/getLastRowDisplay")
+//	public MessageCls getLastRowDisplay(@RequestBody Appointments appointment) {
+//		MessageCls messageCls = new MessageCls(); 
+//		messageCls.setMessage( this.appointmentsService.getLastRowDisplay(appointment));
+//		return messageCls;
+//	}
+	
+//	@PutMapping("/editLastRowDisplay")
+//	public void editLastRowDisplay(@RequestBody Appointments appointment) {
+//	  this.appointmentsService.editLastRowDisplay(appointment);
+//	}
+	
+//	
+//	@PutMapping("/updateNextVisit")
+//	public void updateNextVisit(@RequestBody Appointments appointment) {
+//	  this.appointmentsService.updateNextVisit(appointment);
+//	}
+	
+	@PutMapping("/sendMess")
+	public void sendMess(@RequestBody List<AppointmentClassDto> appointmentsList) {
+	  this.appointmentsService.sendMess(appointmentsList);
+	}
+	
+	@GetMapping("/dummy")
+	public void dummy() {
+	  this.appointmentsService.sendFeedBackForm();
+	}
+	
+
+	
+	@GetMapping("/getKindAppointmentByDoctorId")    
+	public List<AppointmentInfDto> getKindDataById(@RequestParam String type,@RequestParam int doctorId ) {
+	return this.appointmentsService.getKindDataById(type, doctorId);
+	}
+	
+	@PutMapping("/notShowedApp")    
+	public List<NoShowAppointments> notShowedApp(@RequestBody DatesRange datesRange) {
+	return this.appointmentsService.notShowedApp(datesRange);
+	}
+	
+	@PutMapping("/cancledApp")    
+	public List<CancelledAppointmentsDto> cancledApp(@RequestBody DatesRange datesRange) {
+	return this.appointmentsService.cancledApp(datesRange);
+	}
+	
+	
+	@PutMapping("/getByDocIdDep")    
+	public List<Appointments> getByDocIdDep(@RequestBody BookedAppointmentsDto bookedAppointmentsDto  ) {
+	return this.appointmentsService.getByDocIdDep(bookedAppointmentsDto);
+	}
+	
+	
+	
+	@PutMapping("/getFor7DaysByDocIdAndBranchId")    
+	public List<Appointments> getFor7DaysByDocIdAndBranchId(@RequestBody BookedAppointmentsDto bookedAppointmentsDto  ) {
+	return this.appointmentsService.getFor7DaysByDocIdAndBranchId(bookedAppointmentsDto);
+	}
+	
+
+	
+
+	
+	
+}
